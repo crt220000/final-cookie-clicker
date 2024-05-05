@@ -4,7 +4,7 @@ This program will run a classic cookie clicker style game.
 
 ## GitHub Repository Link
 
-https://github.com/crt220000/final-cookie-clicker/upload/main
+[https://github.com/crt220000/final-cookie-clicker/upload/main](https://github.com/crt220000/final-cookie-clicker.git)
 
 ## Features 
 
