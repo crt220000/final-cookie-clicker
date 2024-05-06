@@ -1,8 +1,26 @@
 import pygame
+import random
 
 WIDTH = 960
 HEIGHT = 720
 
+
+
+class Particle:
+    def __init__(self, pos):
+        self.pos = list(pos)
+        self.vel = [random.uniform(-1, 1), random.uniform(-1, 1)]
+        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        self.size = random.randint(2, 5)
+        self.life = 20
+
+    def update(self):
+        self.pos[0] += self.vel[0]
+        self.pos[1] += self.vel[1]
+        self.life -= 1
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (int(self.pos[0]), int(self.pos[1])), self.size)
 
 def draw(screen, cookie_img, cookie_rect):
     screen.blit(cookie_img, cookie_rect)
@@ -12,7 +30,7 @@ def counter(screen, click_count):
     text = font.render(f"Clicks: {click_count[0]}", True, (19, 8, 74))
     screen.blit(text, (370,530))
 
-def user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_count, crunch):
+def user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_count, crunch, particles):
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -26,6 +44,8 @@ def user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_
                     pygame.display.flip()
                     crunch.play()
                     print("Cookie clicked!")
+                    for _ in range(10):
+                        particles.append(Particle(mouse_pos))
 
 def main():
     pygame.init()
@@ -39,6 +59,7 @@ def main():
     crunch = pygame.mixer.Sound('crunch.wav')
     pygame.mixer.music.load("Background Music.mp3")
     pygame.mixer.music.play(-1)
+    particles = []
     running = True
     while running:
         for event in pygame.event.get():
@@ -48,7 +69,14 @@ def main():
         screen.fill((184, 153, 204))
         draw(screen, cookie_img, cookie_rect)
         counter(screen, click_count)
-        user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_count, crunch)
+        user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_count, crunch, particles)
+
+        for particle in particles[:]:
+            particle.update()
+            particle.draw(screen)
+            if particle.life <= 0:
+                particles.remove(particle)
+
         pygame.display.flip()
     pygame.quit()
 
