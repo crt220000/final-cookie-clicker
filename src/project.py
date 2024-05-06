@@ -56,7 +56,12 @@ def win_condition(screen, click_count):
         text = font.render("Your too slow!", True, (161, 6, 6))
     screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
     pygame.display.flip()
-    time.sleep(3)   
+    time.sleep(3)  
+
+def instructions(screen):
+    font = pygame.font.SysFont("Comic Sans MS", 38)
+    text = font.render("Eat 100 cookies under 15 seconds to win!", True, (19, 8, 74))
+    screen.blit(text, (100, 120)) 
 
 def main():
     pygame.init()
@@ -81,6 +86,7 @@ def main():
         screen.fill((184, 153, 204))
         draw(screen, cookie_img, cookie_rect)
         counter(screen, click_count)
+        instructions(screen)
         user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_count, crunch, particles)
 
         if time.time() - start_time >= 15:
