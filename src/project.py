@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 WIDTH = 960
 HEIGHT = 720
@@ -47,6 +48,16 @@ def user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_
                     for _ in range(10):
                         particles.append(Particle(mouse_pos))
 
+def win_condition(screen, click_count):
+    font = pygame.font.SysFont("Comic Sans MS", 40)
+    if click_count[0] >= 100:
+        text = font.render("Cookie Eating Champion!!", True, (115, 255, 134))
+    else:
+        text = font.render("Your too slow!", True, (161, 6, 6))
+    screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+    pygame.display.flip()
+    time.sleep(3)   
+
 def main():
     pygame.init()
     window_res = (WIDTH, HEIGHT)
@@ -60,6 +71,7 @@ def main():
     pygame.mixer.music.load("Background Music.mp3")
     pygame.mixer.music.play(-1)
     particles = []
+    start_time = time.time()
     running = True
     while running:
         for event in pygame.event.get():
@@ -71,6 +83,10 @@ def main():
         counter(screen, click_count)
         user_interaction(cookie_rect, cookie_img, cookie_clicked_img, screen, click_count, crunch, particles)
 
+        if time.time() - start_time >= 15:
+            win_condition(screen, click_count)
+            running = False
+        
         for particle in particles[:]:
             particle.update()
             particle.draw(screen)
