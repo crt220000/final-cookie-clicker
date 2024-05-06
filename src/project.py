@@ -37,6 +37,8 @@ def main():
     cookie_rect = cookie_img.get_rect(center=(WIDTH//2, HEIGHT//2))
     click_count = [0]
     crunch = pygame.mixer.Sound('crunch.wav')
+    pygame.mixer.music.load("Background Music.mp3")
+    pygame.mixer.music.play(-1)
     running = True
     while running:
         for event in pygame.event.get():
